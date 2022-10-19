@@ -8,11 +8,15 @@ import { Book } from "./book.entity";
 export class Author extends BaseEntity {
   @Field()
   @Column()
-  fistName: string;
+  firstName: string;
 
   @Field()
   @Column()
   lastName: string;
+
+  @Field()
+  @Column()
+  bio: string;
 
   @Field(() => [Book])
   @ManyToMany(() => Book, (book) => book.authors)

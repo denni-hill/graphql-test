@@ -14,7 +14,8 @@ export const getDefaultDataSource = () => {
       username: ConfigService.get("DATABASE_USER"),
       password: ConfigService.get("DATABASE_PASSWORD"),
       entities,
-      synchronize: true
+      synchronize: true,
+      logging: true
     });
 
   return defaultDataSource;

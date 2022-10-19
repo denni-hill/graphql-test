@@ -1,8 +1,12 @@
 import { NonEmptyArray } from "type-graphql";
-import { BookResolver } from "./book.resolver";
+import { AuthorResolver } from "./author";
+import { BookResolver } from "./book";
 
-export * from "./book.resolver";
+export * from "./book/";
 
-const resolver: NonEmptyArray<Function> = [BookResolver];
+const resolvers: NonEmptyArray<Function> = [
+  BookResolver,
+  AuthorResolver
+];
 
-export default resolver;
+export default resolvers;

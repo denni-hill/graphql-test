@@ -1,10 +1,12 @@
-import { Field, ID } from "type-graphql";
+import { Field, ID, ObjectType } from "type-graphql";
 import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-  CreateDateColumn
+  CreateDateColumn,
+  DeleteDateColumn
 } from "typeorm";
 
+@ObjectType()
 export abstract class BaseEntity {
   @Field(() => ID)
   @PrimaryGeneratedColumn()
@@ -17,4 +19,8 @@ export abstract class BaseEntity {
   @Field(() => Date)
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Field(() => Date, { nullable: true })
+  @DeleteDateColumn()
+  deletedAt: Date;
 }

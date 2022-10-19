@@ -35,6 +35,10 @@ export class Book extends BaseEntity {
       referencedColumnName: "id"
     }
   })
-  @ManyToMany(() => Author, (author) => author.books)
+  @ManyToMany(() => Author, (author) => author.books, {
+    cascade: true,
+    onDelete: "CASCADE",
+    onUpdate: "CASCADE"
+  })
   authors: Author[];
 }
