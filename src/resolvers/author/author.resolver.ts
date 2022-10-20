@@ -5,8 +5,8 @@ import {
 } from "../parse-field-list";
 import {
   Arg,
+  ID,
   Info,
-  Int,
   Mutation,
   Query,
   Resolver
@@ -40,7 +40,7 @@ export class AuthorResolver {
 
   @Query(() => Author)
   async author(
-    @Arg("id", () => Int) id: number,
+    @Arg("id", () => ID) id: number,
     @Info() info: GraphQLResolveInfo
   ): Promise<Author> {
     const fields = parseFieldList(info.fieldNodes[0]);
@@ -74,7 +74,7 @@ export class AuthorResolver {
 
   @Mutation(() => Author)
   async updateAuthor(
-    @Arg("id", () => Int) id: number,
+    @Arg("id", () => ID) id: number,
     @Arg("data") data: UpdateAuthorInput
   ): Promise<Author> {
     const author = await this.repository.findOne({
@@ -95,7 +95,7 @@ export class AuthorResolver {
 
   @Mutation(() => Author)
   async softDeleteAuthor(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => ID) id: number
   ): Promise<Author> {
     const author = await this.repository.findOne({
       where: { id }
@@ -109,7 +109,7 @@ export class AuthorResolver {
 
   @Mutation(() => Author)
   async restoreAuthor(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => ID) id: number
   ): Promise<Author> {
     const author = await this.repository.findOne({
       where: { id, deletedAt: Not(IsNull()) },
@@ -124,7 +124,7 @@ export class AuthorResolver {
 
   @Mutation(() => Boolean)
   async purgeAuthor(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => ID) id: number
   ): Promise<boolean> {
     const result = await this.repository.delete({ id });
 

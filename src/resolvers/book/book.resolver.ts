@@ -5,18 +5,13 @@ import {
 } from "../parse-field-list";
 import {
   Arg,
+  ID,
   Info,
-  Int,
   Mutation,
   Query,
   Resolver
 } from "type-graphql";
-import {
-  FindOptionsSelect,
-  IsNull,
-  Not,
-  Repository
-} from "typeorm";
+import { IsNull, Not, Repository } from "typeorm";
 import { getDefaultDataSource } from "../../datasources";
 import { Book } from "../../entities";
 import {
@@ -43,7 +38,7 @@ export class BookResolver {
 
   @Query(() => Book)
   async book(
-    @Arg("id", () => Int) id: number,
+    @Arg("id", () => ID) id: number,
     @Info() info: GraphQLResolveInfo
   ): Promise<Book> {
     const fields = parseFieldList(info.fieldNodes[0]);
@@ -72,7 +67,7 @@ export class BookResolver {
 
   @Mutation(() => Book)
   async updateBook(
-    @Arg("id", () => Int) id: number,
+    @Arg("id", () => ID) id: number,
     @Arg("data") data: UpdateBookInput
   ): Promise<Book> {
     const book = await this.repository.findOne({
@@ -93,7 +88,7 @@ export class BookResolver {
 
   @Mutation(() => Book)
   async softDeleteBook(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => ID) id: number
   ): Promise<Book> {
     const book = await this.repository.findOne({
       where: { id }
@@ -106,7 +101,7 @@ export class BookResolver {
 
   @Mutation(() => Book)
   async restoreBook(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => ID) id: number
   ): Promise<Book> {
     const book = await this.repository.findOne({
       where: {
@@ -123,7 +118,7 @@ export class BookResolver {
 
   @Mutation(() => Boolean)
   async purgeBook(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => ID) id: number
   ): Promise<boolean> {
     const result = await this.repository.delete({
       id
