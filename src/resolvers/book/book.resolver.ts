@@ -1,5 +1,9 @@
 import { GraphQLResolveInfo } from "graphql";
 import {
+  parseFieldList,
+  parseRelations
+} from "../parse-field-list";
+import {
   Arg,
   Info,
   Int,
@@ -28,19 +32,27 @@ export class BookResolver {
   async books(
     @Info() info: GraphQLResolveInfo
   ): Promise<Book[]> {
+    const fields = parseFieldList(info.fieldNodes[0]);
+    const relations = parseRelations(fields);
+
     return await this.repository.find({
-      relations: {
-        authors: true
-      }
+      select: fields,
+      relations
     });
   }
 
   @Query(() => Book)
   async book(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => Int) id: number,
+    @Info() info: GraphQLResolveInfo
   ): Promise<Book> {
+    const fields = parseFieldList(info.fieldNodes[0]);
+    const relations = parseRelations(fields);
+
     const book = await this.repository.findOne({
-      where: { id }
+      select: fields,
+      where: { id },
+      relations
     });
     if (book === null) throw new Error("Book not found!");
     return book;

@@ -1,5 +1,11 @@
+import { GraphQLResolveInfo } from "graphql";
+import {
+  parseFieldList,
+  parseRelations
+} from "../parse-field-list";
 import {
   Arg,
+  Info,
   Int,
   Mutation,
   Query,
@@ -20,16 +26,30 @@ import {
 @Resolver(() => Author)
 export class AuthorResolver {
   @Query(() => [Author])
-  async authors(): Promise<Author[]> {
-    return await this.repository.find();
+  async authors(
+    @Info() info: GraphQLResolveInfo
+  ): Promise<Author[]> {
+    const fields = parseFieldList(info.fieldNodes[0]);
+    const relations = parseRelations(fields);
+
+    return await this.repository.find({
+      select: fields,
+      relations
+    });
   }
 
   @Query(() => Author)
   async author(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => Int) id: number,
+    @Info() info: GraphQLResolveInfo
   ): Promise<Author> {
+    const fields = parseFieldList(info.fieldNodes[0]);
+    const relations = parseRelations(fields);
+
     const author = await this.repository.findOne({
-      where: { id }
+      select: fields,
+      where: { id },
+      relations
     });
 
     if (author === null)
